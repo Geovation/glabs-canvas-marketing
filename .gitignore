@@ -1,4 +1,5 @@
 .DS_Store
+key
 app/node_modules
 app/package.json
 app/package-lock.json

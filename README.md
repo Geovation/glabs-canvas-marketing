@@ -1,15 +1,26 @@
 # Marketing Site
 
-Docker:
+## Running Locally
+
+```
+cd app
+DROPBOX_ACCESS_TOKEN=xxx npm run start
+curl -X POST -H 'Content-Type: text/plain' --data 'This is a *very* nice sentence.' http://localhost:8004/api/upload
+curl http://localhost:8004/api/download
+```
+
+## Running Locally with Docker
 
 ```
 DROPBOX_ACCESS_TOKEN=xxx docker build . -t now-react-static:initial
 docker run -e DROPBOX_ACCESS_TOKEN -p8004:8004 now-react-static:initial
 ```
 
-Deployment:
+## Deployment
 
-Install now Desktop and you get the `now` command line tool.
+First [install now Desktop](https://zeit.co/download) and you get the `now` command line tool.
+
+Deploy a new instance like this, specifying the Dropbox access token instead of `xxx` like this:
 
 ```
 now -e DROPBOX_ACCESS_TOKEN=xxx
@@ -45,7 +56,7 @@ now ls now-react-static
   now-react-static    now-react-static-dpbxrixxlp.now.sh         -    DOCKER    READY    1d
 ```
 
-You can create a now alias for a particular instance like this:
+Now, it would be annoying to have to tell everyone a new URL each time you made a change, so instead you can create a now alias for a particular instance and give that out to people instead. You can do so like this:
 
 ```
 $ now alias set now-react-static-grnfyhsggu.now.sh glabs-canvas.now.sh
@@ -53,12 +64,18 @@ $ now alias set now-react-static-grnfyhsggu.now.sh glabs-canvas.now.sh
 > Success! glabs-canvas.now.sh now points to now-react-static-grnfyhsggu.now.sh [3s]
 ```
 
-You can create an alias from a custom domain like this:
+This now means that you can give out glabs-canvas.now.sh as a URL and it will currently point to the same instance as the now-react-static-grnfyhsggu.now.sh  URL.
+
+It isn't always appropriate to use a domain ending in `.now.sh`. You might want to use your own custom domain instead. Zeit now allows you to do this is you can first proove you own the domain. Here's an example of setting up the same instance to be accessible at the domain canvas.glabs.jimmyg.org:
 
 ```
 now alias set now-react-static-grnfyhsggu.now.sh canvas.glabs.jimmyg.org
+```
 
-The first time you try it will break like this:
+The first time you try this you'll get an error message asking you to prove you
+own the domain by adding a `TXT` record to your domain. `TXT` records are just
+a type of DNS record. You would only be able to do this if you owned the
+domain.
 
 ```
 > Assigning alias canvas.glabs.jimmyg.org to deployment now-react-static-grnfyhsggu.now.sh
@@ -77,7 +94,7 @@ The first time you try it will break like this:
                 ALIAS        alias.zeit.co
 ```
 
-If you add the value as a `TXT` record under the `_now` subdomain and then alias your custom domain to `alias.zeit.co` and try again, you'll see this:
+If you add the value as a `TXT` record under the `_now` subdomain and then alias your custom domain to `alias.zeit.co` and try again, Zeit now will check the record and this time the alias will succeed:
 
 ```
 > Assigning alias canvas.glabs.jimmyg.org to deployment now-react-static-grnfyhsggu.now.sh
@@ -85,13 +102,4 @@ If you add the value as a `TXT` record under the `_now` subdomain and then alias
 > Success! Domain jimmyg.org added!
 > Certificate for canvas.glabs.jimmyg.org (cert_QwJdkzPn4kPeEbZ) created [10s]
 > Success! canvas.glabs.jimmyg.org now points to now-react-static-grnfyhsggu.now.sh [15s]
-```
-
-Running locally:
-
-```
-cd app
-DROPBOX_ACCESS_TOKEN=xxx npm run start
-curl -X POST -H 'Content-Type: text/plain' --data 'This is a *very* nice sentence.' http://localhost:8004/api/upload
-curl http://localhost:8004/api/download
 ```
