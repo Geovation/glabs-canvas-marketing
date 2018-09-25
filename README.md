@@ -66,7 +66,7 @@ $ now alias set now-react-static-grnfyhsggu.now.sh glabs-canvas.now.sh
 
 This now means that you can give out glabs-canvas.now.sh as a URL and it will currently point to the same instance as the now-react-static-grnfyhsggu.now.sh  URL.
 
-It isn't always appropriate to use a domain ending in `.now.sh`. You might want to use your own custom domain instead. Zeit now allows you to do this is you can first proove you own the domain. Here's an example of setting up the same instance to be accessible at the domain `canvas.glabs.jimmyg.org` but you could equally well use `myapp.com` or `somedomain.org` if you owned them:
+It isn't always appropriate to use a domain ending in `.now.sh`. You might want to use your own custom domain instead. Zeit now allows you to do this is you can first prove you own the domain. Here's an example of setting up the same instance to be accessible at the domain `canvas.glabs.jimmyg.org` but you could equally well use `myapp.com` or `somedomain.org` if you owned them:
 
 ```
 now alias set now-react-static-grnfyhsggu.now.sh canvas.glabs.jimmyg.org
@@ -105,6 +105,8 @@ Here is what my DNS looks like:
 _now.jimmyg.org.          300  TXT    a1a6add8943a890f6f239ad05f6a9a7d25a3e863db6803f9a57f4b05c314a396
 canvas.glabs.jimmyg.org.  300  CNAME  alias.zeit.co.
 ```
+
+You need to add the `TXT` record to prove you own the domain, and the `CNAME` or `ALIAS` record so that the DNS points to the right place.
 
 Running the command again gives:
 
