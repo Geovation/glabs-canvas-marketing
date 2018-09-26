@@ -1,14 +1,15 @@
 {
   "name": "app",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "start.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node start.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.3",
     "commonmark": "^0.28.1",

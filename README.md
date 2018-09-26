@@ -22,7 +22,7 @@ First [install now Desktop](https://zeit.co/download) and you get the `now` comm
 
 In Dropbox, login and go to /development and from that URL you can add a new v2 app named `Glabs Canvas`. You can then generate an access token.
 
-Once that's done, install the Dropbox desktop client and add a file `Apps/Glabs Canvas/test/basic2.js` in your dropbox with this content:
+Once that's done, install the Dropbox desktop client and add a file `Apps/Glabs Canvas/index.md` in your dropbox with this content:
 
 ```
 This is a *very* nice sentence.
@@ -33,10 +33,13 @@ Unfortunately you can't add `.js` files directly in the web interface.
 Deploy a new instance like this, specifying the Dropbox access token instead of `xxx` like this:
 
 ```
-now -e DROPBOX_ACCESS_TOKEN=xxx
+now --public -e DROPBOX_ACCESS_TOKEN=xxx
+now alias set glabs-canvas-marketing-ybyqnndesl.now.sh canvas.glabs.jimmyg.org
 ```
 
 Now visit the URL created by the deployment.
+
+There is some more information about now deployments and aliases in the next section.
 
 ### Exploring Your Instances
 

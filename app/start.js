@@ -17,7 +17,7 @@ const ce = React.createElement
 const server = express();
 const parser = new CommonMark.Parser();
 const renderer = new ReactRenderer();
-const PATH = '/test/basic2.js'
+const PATH = '/index.md'
 
 server.use(bodyParser.raw({type: '*/*'}));
 

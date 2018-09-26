@@ -1,12 +1,11 @@
 FROM node:alpine as base
 
 FROM base as builder
-
 RUN mkdir /app
 WORKDIR /app
-
-#RUN apk add --virtual build-dependencies build-base
-RUN npm install react react-dom express body-parser isomorphic-fetch dropbox commonmark-react-renderer commonmark
+COPY app/package.json /app
+COPY app/package-lock.json /app
+RUN npm install
 
 FROM base
 
