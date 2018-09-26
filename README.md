@@ -20,11 +20,28 @@ docker run -e DROPBOX_ACCESS_TOKEN -p8004:8004 now-react-static:initial
 
 First [install now Desktop](https://zeit.co/download) and you get the `now` command line tool.
 
+In Dropbox, login and go to /development and from that URL you can add a new v2 app named `Glabs Canvas`. You can then generate an access token.
+
+Once that's done, install the Dropbox desktop client and add a file `Apps/Glabs Canvas/index.md` in your dropbox with this content:
+
+```
+This is a *very* nice sentence.
+```
+
+Unfortunately you can't add `.js` files directly in the web interface.
+
 Deploy a new instance like this, specifying the Dropbox access token instead of `xxx` like this:
 
 ```
-now -e DROPBOX_ACCESS_TOKEN=xxx
+now --public -e DROPBOX_ACCESS_TOKEN=xxx
+now alias set glabs-canvas-marketing-ybyqnndesl.now.sh canvas.glabs.jimmyg.org
 ```
+
+Now visit the URL created by the deployment.
+
+There is some more information about now deployments and aliases in the next section.
+
+### Exploring Your Instances
 
 You can see your apps like this:
 
@@ -55,6 +72,8 @@ now ls now-react-static
   now-react-static    now-react-static-bvvjprsdow.now.sh         -    DOCKER    READY    1d
   now-react-static    now-react-static-dpbxrixxlp.now.sh         -    DOCKER    READY    1d
 ```
+
+### Create a Domain Alias
 
 Now, it would be annoying to have to tell everyone a new URL each time you made a change, so instead you can create a now alias for a particular instance and give that out to people instead. You can do so like this:
 
@@ -118,3 +137,5 @@ now alias set now-react-static-grnfyhsggu.now.sh canvas.glabs.jimmyg.org
 > Certificate for canvas.glabs.jimmyg.org (cert_QwJdkzPn4kPeEbZ) created [10s]
 > Success! canvas.glabs.jimmyg.org now points to now-react-static-grnfyhsggu.now.sh [15s]
 ```
+
+You can now visit your app by visiting https://canvas.glabs.jimmyg.org.
