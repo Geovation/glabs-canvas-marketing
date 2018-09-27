@@ -4,25 +4,23 @@
 
 ```
 cd app
-DROPBOX_ACCESS_TOKEN=xxx npm run start
-curl -X POST -H 'Content-Type: text/plain' --data 'This is a *very* nice sentence.' http://localhost:8004/api/upload
-curl http://localhost:8004/api/download
+DROPBOX_FOLDER_PATH=www DROPBOX_ACCESS_TOKEN=xxx npm run start
 ```
 
 ## Running Locally with Docker
 
 ```
-DROPBOX_ACCESS_TOKEN=xxx docker build . -t now-react-static:initial
-docker run -e DROPBOX_ACCESS_TOKEN -p8004:8004 now-react-static:initial
+DROPBOX_FOLDER_PATH=www DROPBOX_ACCESS_TOKEN=xxx docker build . -t now-react-static:initial
+docker run -e DROPBOX_ACCESS_TOKEN -e DROPBOX_FOLDER_PATH -p8004:8004 now-react-static:initial
 ```
 
 ## Deployment
 
 First [install now Desktop](https://zeit.co/download) and you get the `now` command line tool.
 
-In Dropbox, login and go to /development and from that URL you can add a new v2 app named `Glabs Canvas`. You can then generate an access token.
+In Dropbox, login and go to /development and from that URL you can add a new v2 app with a unique name of your choice, and full access. You can then generate an access token.
 
-Once that's done, install the Dropbox desktop client and add a file `Apps/Glabs Canvas/index.md` in your dropbox with this content:
+Once that's done, install the Dropbox desktop client and add a directory named `www` to share with people who should be able to change the website. Inside the `www` directory create a file `index.md` with this content:
 
 ```
 This is a *very* nice sentence.
@@ -33,7 +31,7 @@ Unfortunately you can't add `.js` files directly in the web interface.
 Deploy a new instance like this, specifying the Dropbox access token instead of `xxx` like this:
 
 ```
-now --public -e DROPBOX_ACCESS_TOKEN=xxx
+now --public -e DROPBOX_FOLDER_PATH=www -e DROPBOX_ACCESS_TOKEN=xxx
 now alias set glabs-canvas-marketing-ybyqnndesl.now.sh canvas.glabs.jimmyg.org
 ```
 

@@ -17,4 +17,5 @@ EXPOSE 8004
 ENV NODE_PATH=/app/node_modules
 ENV PATH="${PATH}:/app/node_modules/.bin"
 ARG DROPBOX_ACCESS_TOKEN
+ARG DROPBOX_FOLDER_PATH
 CMD ["npm", "run", "start"]

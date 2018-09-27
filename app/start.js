@@ -7,6 +7,7 @@ const ReactDOMServer = require('react-dom/server')
 const React = require('react')
 const CommonMark = require('commonmark');
 const ReactRenderer = require('commonmark-react-renderer');
+const mime = require('mime');
 
 if (!process.env.DROPBOX_ACCESS_TOKEN) {
     console.error('No DROPBOX_ACCESS_TOKEN environment variable specified')
@@ -17,7 +18,8 @@ const ce = React.createElement
 const server = express();
 const parser = new CommonMark.Parser();
 const renderer = new ReactRenderer();
-const PATH = '/index.md'
+const DROPBOX_FOLDER_PATH = process.env.DROPBOX_FOLDER_PATH || ''
+console.log('Serving from', process.env.DROPBOX_FOLDER_PATH)
 
 server.use(bodyParser.raw({type: '*/*'}));
 
@@ -27,25 +29,56 @@ class Hello extends React.Component {
     const ast = parser.parse(input);
     const result = renderer.render(ast);
     return ce('div', {}, [
-      ce('h1', {key: 1}, 'Hello, world'),
+      // ce('h1', {key: 1}, 'Hello, world'),
       ...result
     ])
   }
 }
 
-server.get('/', async (req, res, next) => {
+server.get('*', async (req, res, next) => {
   try {
-    const fileDownload = await dbx.filesDownload({path: PATH})
-    md = fileDownload.fileBinary.toString()
-    const elem = React.createElement(Hello, {md}, null)
-    const serverString = ReactDOMServer.renderToString(elem);
-    res.send(serverString)
+    let filename
+    let contentType
+    let markdown = false
+    if (req.path === '/') {
+      filename = '/index.md'
+      contentType = 'text/html'
+      markdown = true
+    } else {
+      const parts = req.path.split('/')
+      const last = parts[parts.length-1]
+      if (last.includes('.')) {
+        lastParts = last.split('.')
+        ext = lastParts[lastParts.length-1]
+        contentType = mime.getType(ext)
+        filename = req.path
+      } else {
+        filename = req.path + '.md'
+        markdown = true
+      }
+    }
+    const path = '/' + DROPBOX_FOLDER_PATH + filename;
+    console.log(path)
+    const fileDownload = await dbx.filesDownload({path})
+    if (markdown) {
+      md = fileDownload.fileBinary.toString()
+      const elem = React.createElement(Hello, {md}, null)
+      const serverString = ReactDOMServer.renderToString(elem);
+      res.send(serverString)
+    } else {
+      res.contentType(contentType)
+      res.end(fileDownload.fileBinary)
+    }
   } catch (e) {
     next(e)
   }
 });
 
 // Leaving these away from production for now
+// Use like this when uncommented:
+//   curl -X POST -H 'Content-Type: text/plain' --data 'This is a *very* nice sentence.' http://localhost:8004/api/upload
+//   curl http://localhost:8004/api/download
+
 // server.get('/api/', (req, res) => {
 //   res.contentType('text/plain')
 //   res.send('Upload at /upload and download at /download');
@@ -72,6 +105,7 @@ server.get('/', async (req, res, next) => {
 
 // Error handler has to be last
 server.use(function(err, req, res, next) {
+  // console.log(err)
   res.status(500).send('Something broke!')
 });
 
