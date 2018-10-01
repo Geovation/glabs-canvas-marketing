@@ -8,6 +8,8 @@ const React = require('react')
 const CommonMark = require('commonmark');
 const ReactRenderer = require('commonmark-react-renderer');
 const mime = require('mime');
+const Mustache = require('mustache');
+const yamlFront = require('yaml-front-matter')
 
 if (!process.env.DROPBOX_ACCESS_TOKEN) {
     console.error('No DROPBOX_ACCESS_TOKEN environment variable specified')
@@ -57,14 +59,38 @@ server.get('*', async (req, res, next) => {
         markdown = true
       }
     }
-    const path = '/' + DROPBOX_FOLDER_PATH + filename;
+    const path = '/' + DROPBOX_FOLDER_PATH + '/public' + filename;
     console.log(path)
-    const fileDownload = await dbx.filesDownload({path})
+    let fileDownload
+    try {
+      fileDownload = await dbx.filesDownload({path})
+    } catch (e) {
+      if (e.response.statusText.substring(0, 14) === 'path/not_found') {
+        return res.status(404).send('Not found')
+      } else {
+        return res.status(500).send('Could not get file')
+      }
+    }
     if (markdown) {
-      md = fileDownload.fileBinary.toString()
+      const fileContent = fileDownload.fileBinary.toString()
+      const {__content: md, title, template} = yamlFront.loadFront(fileContent)
       const elem = React.createElement(Hello, {md}, null)
-      const serverString = ReactDOMServer.renderToString(elem);
-      res.send(serverString)
+      const content = ReactDOMServer.renderToString(elem);
+      // console.log(title, template)
+      const templatePath = '/' + DROPBOX_FOLDER_PATH + '/template/' + template + '.mustache'
+      let templateDownload
+      try {
+        templateDownload = await dbx.filesDownload({path: templatePath})
+      } catch (e) {
+        if (e.response.statusText.substring(0, 14) === 'path/not_found') {
+          return res.status(404).send('No such template')
+        } else {
+          return res.status(500).send('Error getting template')
+        }
+      }
+      const templateContent = templateDownload.fileBinary.toString()
+      const output = Mustache.render(templateContent, {title, content})
+      res.send(output)
     } else {
       res.contentType(contentType)
       res.end(fileDownload.fileBinary)
@@ -105,13 +131,15 @@ server.get('*', async (req, res, next) => {
 
 // Error handler has to be last
 server.use(function(err, req, res, next) {
-  // console.log(err)
+  if ((process.env.DEBUG || 'false').toLowerCase() === 'true') {
+    console.log('Error:', err)
+  }
   res.status(500).send('Something broke!')
 });
 
 process.on('SIGINT', function() {
-    console.log('Got SIGINT')
-    process.exit();
+  console.log('Got SIGINT')
+  process.exit();
 });
 
 console.log('Serving on 8004')
