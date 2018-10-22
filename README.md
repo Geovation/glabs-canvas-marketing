@@ -4,14 +4,14 @@
 
 ```
 cd app
-DROPBOX_FOLDER_PATH=www DROPBOX_ACCESS_TOKEN=xxx npm run start
+DROPBOX_FOLDER_PATH=/www/ DROPBOX_SECRET=xxx DROPBOX_ACCESS_TOKEN=xxx npm run start
 ```
 
 ## Running Locally with Docker
 
 ```
-DROPBOX_FOLDER_PATH=www DROPBOX_ACCESS_TOKEN=xxx docker build . -t now-react-static:initial
-docker run -e DROPBOX_ACCESS_TOKEN -e DROPBOX_FOLDER_PATH -p8004:8004 now-react-static:initial
+DROPBOX_FOLDER_PATH=/www/ DROPBOX_SECRET=xxx DROPBOX_ACCESS_TOKEN=xxx docker build . -t now-react-static:initial
+docker run -e DROPBOX_ACCESS_TOKEN -e DROPBOX_SECRET -e DROPBOX_FOLDER_PATH -p8004:8004 now-react-static:initial
 ```
 
 ## Deployment
@@ -20,33 +20,10 @@ First [install now Desktop](https://zeit.co/download) and you get the `now` comm
 
 In Dropbox, login and go to /development and from that URL you can add a new v2 app with a unique name of your choice, and full access. You can then generate an access token.
 
-Once that's done, install the Dropbox desktop client and add a directory named `www` to share with people who should be able to change the website. Inside the `www` directory create a `public` and `template`. Create file `public/index.md` with this content:
+Once that's done, install the Dropbox desktop client and add a directory named `www` to share with people who should be able to change the website. Inside the `www` directory create a file `index.md` with this content:
 
 ```
----
-title: Home
-template: main
----
-
 This is a *very* nice sentence.
-```
-
-Now create `template/main.mustache` with this content:
-
-```
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>{{title}}</title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-  {{{content}}}
-  <script src="js/app.js"></script>
-</body>
-</html>
 ```
 
 Unfortunately you can't add `.js` files directly in the web interface.
@@ -54,7 +31,7 @@ Unfortunately you can't add `.js` files directly in the web interface.
 Deploy a new instance like this, specifying the Dropbox access token instead of `xxx` like this:
 
 ```
-now --public -e DROPBOX_FOLDER_PATH=www -e DROPBOX_ACCESS_TOKEN=xxx
+now --public -e DROPBOX_REMOTE_FOLDER_PATH=/www/ -e DROPBOX_ACCESS_TOKEN=xxx
 now alias set glabs-canvas-marketing-ybyqnndesl.now.sh canvas.glabs.jimmyg.org
 ```
 
