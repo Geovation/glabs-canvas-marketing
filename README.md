@@ -20,10 +20,33 @@ First [install now Desktop](https://zeit.co/download) and you get the `now` comm
 
 In Dropbox, login and go to /development and from that URL you can add a new v2 app with a unique name of your choice, and full access. You can then generate an access token.
 
-Once that's done, install the Dropbox desktop client and add a directory named `www` to share with people who should be able to change the website. Inside the `www` directory create a file `index.md` with this content:
+Once that's done, install the Dropbox desktop client and add a directory named `www` to share with people who should be able to change the website. Inside the `www` directory create a `public` and `template`. Create file `public/index.md` with this content:
 
 ```
+---
+title: Home
+template: main
+---
+
 This is a *very* nice sentence.
+```
+
+Now create `template/main.mustache` with this content:
+
+```
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  {{{content}}}
+  <script src="js/app.js"></script>
+</body>
+</html>
 ```
 
 Unfortunately you can't add `.js` files directly in the web interface.
@@ -137,3 +160,11 @@ now alias set now-react-static-grnfyhsggu.now.sh canvas.glabs.jimmyg.org
 ```
 
 You can now visit your app by visiting https://canvas.glabs.jimmyg.org.
+
+## Debug
+
+To see any errors in the console, start the server with this environment variable set:
+
+```
+DEBUG=true
+```
