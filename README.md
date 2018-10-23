@@ -28,10 +28,10 @@ This is a *very* nice sentence.
 
 Unfortunately you can't add `.js` files directly in the web interface.
 
-Deploy a new instance like this, specifying the Dropbox access token instead of `xxx` like this:
+Deploy a new instance like this, specifying the Dropbox access token, secret and the remote folder path instead of `xxx` like this:
 
 ```
-now --public -e DROPBOX_REMOTE_FOLDER_PATH=/www/ -e DROPBOX_ACCESS_TOKEN=xxx
+now --public -e DROPBOX_SECRET=xxx -e DROPBOX_REMOTE_FOLDER_PATH=/www/ -e DROPBOX_ACCESS_TOKEN=xxx
 now alias set glabs-canvas-marketing-ybyqnndesl.now.sh canvas.glabs.jimmyg.org
 ```
 
