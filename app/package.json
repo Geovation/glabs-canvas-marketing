@@ -6,6 +6,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "fix": "standard --fix *.js",
+    "dev": "nodemon server.js -e js,pug,styl,coffee",
     "start": "node start.js"
   },
   "author": "",
@@ -19,8 +21,13 @@
     "isomorphic-fetch": "^2.2.1",
     "mime": "^2.3.1",
     "mustache": "^3.0.0",
+    "nodemon": "^1.18.4",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "shelljs": "^0.8.2",
     "yaml-front-matter": "^4.0.0"
+  },
+  "devDependencies": {
+    "standard": "^12.0.1"
   }
 }

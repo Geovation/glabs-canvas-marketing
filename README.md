@@ -4,14 +4,14 @@
 
 ```
 cd app
-DROPBOX_FOLDER_PATH=www DROPBOX_ACCESS_TOKEN=xxx npm run start
+DROPBOX_FOLDER_PATH=/www/ DROPBOX_SECRET=xxx DROPBOX_ACCESS_TOKEN=xxx npm run start
 ```
 
 ## Running Locally with Docker
 
 ```
-DROPBOX_FOLDER_PATH=www DROPBOX_ACCESS_TOKEN=xxx docker build . -t now-react-static:initial
-docker run -e DROPBOX_ACCESS_TOKEN -e DROPBOX_FOLDER_PATH -p8004:8004 now-react-static:initial
+DROPBOX_FOLDER_PATH=/www/ DROPBOX_SECRET=xxx DROPBOX_ACCESS_TOKEN=xxx docker build . -t now-react-static:initial
+docker run -e DROPBOX_ACCESS_TOKEN -e DROPBOX_SECRET -e DROPBOX_FOLDER_PATH -p8004:8004 now-react-static:initial
 ```
 
 ## Deployment
@@ -28,10 +28,10 @@ This is a *very* nice sentence.
 
 Unfortunately you can't add `.js` files directly in the web interface.
 
-Deploy a new instance like this, specifying the Dropbox access token instead of `xxx` like this:
+Deploy a new instance like this, specifying the Dropbox access token, secret and the remote folder path instead of `xxx` like this:
 
 ```
-now --public -e DROPBOX_FOLDER_PATH=www -e DROPBOX_ACCESS_TOKEN=xxx
+now --public -e DROPBOX_SECRET=xxx -e DROPBOX_REMOTE_FOLDER_PATH=/www/ -e DROPBOX_ACCESS_TOKEN=xxx
 now alias set glabs-canvas-marketing-ybyqnndesl.now.sh canvas.glabs.jimmyg.org
 ```
 
@@ -137,3 +137,11 @@ now alias set now-react-static-grnfyhsggu.now.sh canvas.glabs.jimmyg.org
 ```
 
 You can now visit your app by visiting https://canvas.glabs.jimmyg.org.
+
+## Debug
+
+To see any errors in the console, start the server with this environment variable set:
+
+```
+DEBUG=true
+```
